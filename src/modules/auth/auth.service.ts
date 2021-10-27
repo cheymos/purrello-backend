@@ -10,8 +10,8 @@ import {
   Errors,
   InvalidFieldsException,
 } from '../../common/exceptions/invalid-fields.exception';
-import { LoginDto } from '../dtos/login.dto';
-import { RegisterDto } from '../dtos/register.dto';
+import { LoginDto } from './dtos/login.dto';
+import { RegisterDto } from './dtos/register.dto';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token.service';

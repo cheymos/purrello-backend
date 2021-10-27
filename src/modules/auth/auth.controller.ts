@@ -10,8 +10,8 @@ import {
 import { Response } from 'express';
 import { Cookies } from '../../common/decorators/cookies.decorator';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
-import { LoginDto } from '../dtos/login.dto';
-import { RegisterDto } from '../dtos/register.dto';
+import { LoginDto } from './dtos/login.dto';
+import { RegisterDto } from './dtos/register.dto';
 import { AuthService } from './auth.service';
 import { LoginResponse } from './types/login-response.type';
 
