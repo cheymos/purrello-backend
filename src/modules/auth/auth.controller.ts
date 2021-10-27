@@ -49,8 +49,22 @@ export class AuthController {
     res.clearCookie('refreshToken');
   }
 
+  @Post('refresh')
+  @HttpCode(200)
+  async refresh(
+    @Cookies('refreshToken') refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<LoginResponse> {
+    const user = await this.authService.refresh(refreshToken);
+
+    const response = await this.authService.buildLoginResponse(user);
+    this.placeRefreshTokenInCookies(res, response.refreshToken);
+
+    return response;
+  }
+
   private placeRefreshTokenInCookies(
-    res: Response,
+    res: Response<LoginResponse>,
     refreshToken: string,
   ): void {
     res.cookie('refreshToken', refreshToken, {

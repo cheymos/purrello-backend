@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {
   EMAIL_IS_ALREADY_USE,
@@ -58,6 +58,23 @@ export class AuthService {
 
   async logout(refreshToken: string): Promise<void> {
     await this.tokenService.removeRefreshToken(refreshToken);
+  }
+
+  async refresh(refreshToken: string): Promise<UserEntity> {
+    if (!refreshToken) throw new UnauthorizedException();
+
+    const userData = this.tokenService.validateToken('REFRESH', refreshToken);
+
+    if (!userData) throw new UnauthorizedException();
+
+    const tokenDataFromDb = await this.tokenService.findRefreshToken(
+      refreshToken,
+    );
+
+    if (!tokenDataFromDb) throw new UnauthorizedException();
+
+    // @ts-ignore
+    return this.userService.findBy('id', tokenDataFromDb.userId);
   }
 
   async buildLoginResponse(user: UserEntity): Promise<LoginResponse> {
