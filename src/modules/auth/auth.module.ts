@@ -14,6 +14,7 @@ import { TokenService } from './token.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, TokenService],
+  exports: [AuthService],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {

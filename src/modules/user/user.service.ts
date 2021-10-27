@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginateQuery } from '../../common/types/paginate-query.type';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
 import { RegisterDto } from '../auth/dtos/register.dto';
 import { UserEntity } from './entities/user.entity';
 
@@ -19,6 +21,18 @@ export class UserService {
     const newUser = new UserEntity(username, email, password);
 
     return this.userRepository.save(newUser);
+  }
+
+  async getAll({
+    limit,
+    offset,
+  }: PaginateQuery): Promise<PaginateResponse<UserEntity>> {
+    const [data, total] = await this.userRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+
+    return { data, total };
   }
 
   findBy(
