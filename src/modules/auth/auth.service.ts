@@ -12,7 +12,7 @@ import {
 } from '../../common/exceptions/invalid-fields.exception';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
-import { UserEntity } from '../user/entities/user.entity';
+import { Roles, UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token.service';
 import { LoginResponse } from './types/login-response.type';
@@ -75,6 +75,16 @@ export class AuthService {
 
     // @ts-ignore
     return this.userService.findBy('id', tokenDataFromDb.userId);
+  }
+
+  async checkRole(userId: number, role: Roles): Promise<boolean> {
+    const user = await this.userService.findBy('id', userId);
+
+    if (!user || user.role === Roles.BANNED) {
+      return false;
+    }
+
+    return user.role === role || user.role === Roles.ADMIN;
   }
 
   async buildLoginResponse(user: UserEntity): Promise<LoginResponse> {
