@@ -8,6 +8,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { Cookies } from '../../common/decorators/cookies.decorator';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
 import { LoginDto } from '../dtos/login.dto';
 import { RegisterDto } from '../dtos/register.dto';
@@ -36,6 +37,16 @@ export class AuthController {
     this.placeRefreshTokenInCookies(res, response.refreshToken);
 
     return response;
+  }
+
+  @Post('logout')
+  @HttpCode(204)
+  async logout(
+    @Cookies('refreshToken') refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    await this.authService.logout(refreshToken);
+    res.clearCookie('refreshToken');
   }
 
   private placeRefreshTokenInCookies(

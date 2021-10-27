@@ -16,7 +16,6 @@ import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token.service';
 import { LoginResponse } from './types/login-response.type';
-import { Tokens } from './types/tokens.type';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +54,10 @@ export class AuthService {
       throw new InvalidFieldsException({ password: [PASSWORD_INVALID] });
 
     return user;
+  }
+
+  async logout(refreshToken: string): Promise<void> {
+    await this.tokenService.removeRefreshToken(refreshToken);
   }
 
   async buildLoginResponse(user: UserEntity): Promise<LoginResponse> {
