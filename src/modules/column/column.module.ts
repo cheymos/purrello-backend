@@ -10,5 +10,6 @@ import { ColumnEntity } from './entities/column.entity';
   imports: [TypeOrmModule.forFeature([ColumnEntity]), AuthModule, BoardModule],
   controllers: [ColumnBoardController],
   providers: [ColumnService],
+  exports: [ColumnService]
 })
 export class ColumnModule {}
