@@ -48,6 +48,16 @@ export class CardService {
     return card;
   }
 
+  async deleteOne(id: number): Promise<void> {
+    if (isNaN(id)) return;
+
+    const card = await this.cardRepository.findOne(id);
+
+    if (!card) return;
+
+    await this.cardRepository.delete(id);
+  }
+
   async findById(id: number, withColumn = false): Promise<CardEntity> {
     if (isNaN(id)) throw new NotFoundException(CARD_NOT_FOUND);
 
