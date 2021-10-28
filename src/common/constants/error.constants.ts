@@ -7,5 +7,8 @@ export const PASSWORD_INVALID = 'Invalid password';
 /* Board */
 export const BOARD_NOT_FOUND = 'Board not found';
 
+/* Column */
+export const COLUMN_NOT_FOUND = 'Column not found';
+
 /* Other */
 export const ACCESS_DENIED = 'Access denied';
