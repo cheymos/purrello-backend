@@ -1,13 +1,13 @@
 import {
   ForbiddenException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
   ACCESS_DENIED,
-  BOARD_NOT_FOUND,
+  BOARD_NOT_FOUND
 } from '../../common/constants/error.constants';
 import { BoardDto } from './dtos/board.dto';
 import { BoardEntity } from './entities/board.entity';
@@ -61,6 +61,8 @@ export class BoardService {
   }
 
   async findById(id: number): Promise<BoardEntity> {
+    if (isNaN(id)) throw new NotFoundException(BOARD_NOT_FOUND);
+
     const board = await this.boardRepository.findOne(id);
 
     if (!board) throw new NotFoundException(BOARD_NOT_FOUND);
