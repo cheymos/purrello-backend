@@ -3,6 +3,12 @@ import { BoardEntity } from '../../board/entities/board.entity';
 
 @Entity('columns')
 export class ColumnEntity {
+  constructor(title: string, pos: number, boardId: number) {
+    this.title = title;
+    this.pos = pos;
+    this.boardId = boardId;
+  }
+
   @PrimaryGeneratedColumn()
   readonly id: number;
 
@@ -15,6 +21,6 @@ export class ColumnEntity {
   @Column()
   boardId: number;
 
-  @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE' })
-  board?: BoardEntity;
+  @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE', eager: true })
+  board: BoardEntity;
 }
