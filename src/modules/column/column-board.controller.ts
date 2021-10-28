@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes
 } from '@nestjs/common';
@@ -35,5 +38,12 @@ export class ColumnBoardController {
   @UseGuards(AuthGuard)
   getColumn(@Param('id') id: number, @User('id') userId: number) {
     return this.columnService.getOne(id, userId);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard)
+  async updateColumn(@Param('id') id: number, @Body() data: ColumnDto) {
+    await this.columnService.update(id, data);
   }
 }

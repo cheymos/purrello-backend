@@ -22,5 +22,5 @@ export class ColumnEntity {
   boardId: number;
 
   @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE', eager: true })
-  board: BoardEntity;
+  board?: BoardEntity;
 }

@@ -31,7 +31,7 @@ export class ColumnService {
   async getOne(id: number, userId: number): Promise<ColumnEntity> {
     const column = await this.findById(id);
 
-    if (column.board.isPrivate && column.board.ownerId !== userId)
+    if (column.board?.isPrivate && column.board.ownerId !== userId)
       throw new ForbiddenException(ACCESS_DENIED);
 
     return column;
@@ -43,6 +43,20 @@ export class ColumnService {
     const column = await this.columnRepository.findOne(id);
 
     if (!column) throw new NotFoundException(COLUMN_NOT_FOUND);
+
+    return column;
+  }
+
+  async update(
+    id: number,
+    { title, pos }: ColumnDto,
+  ): Promise<ColumnEntity> {
+    const column = await this.findById(id);
+
+    delete column.board;
+    Object.assign(column, { title, pos });
+
+    await this.columnRepository.update(id, column);
 
     return column;
   }
