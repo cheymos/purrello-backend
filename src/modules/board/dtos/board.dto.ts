@@ -5,7 +5,6 @@ export class BoardDto {
   @Length(1, 255)
   title: string;
 
-  @IsOptional()
   @IsBoolean()
   isPrivate: boolean;
 }
