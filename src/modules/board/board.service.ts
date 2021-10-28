@@ -1,6 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import {
+  ACCESS_DENIED,
+  BOARD_NOT_FOUND,
+} from '../../common/constants/error.constants';
 import { BoardDto } from './dtos/board.dto';
 import { BoardEntity } from './entities/board.entity';
 
@@ -17,5 +25,22 @@ export class BoardService {
     const board = new BoardEntity(title, userId, isPrivate);
 
     return this.boardRepository.save(board);
+  }
+
+  async getOne(id: number, userId: number): Promise<BoardEntity> {
+    const board = await this.findById(id);
+
+    if (board.isPrivate && board.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
+
+    return board;
+  }
+
+  async findById(id: number): Promise<BoardEntity> {
+    const board = await this.boardRepository.findOne(id);
+
+    if (!board) throw new NotFoundException(BOARD_NOT_FOUND);
+
+    return board;
   }
 }
