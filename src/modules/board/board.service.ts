@@ -52,6 +52,8 @@ export class BoardService {
   }
 
   async deleteOne(id: number, userId: number): Promise<void> {
+    if (isNaN(id)) return;
+
     const board = await this.boardRepository.findOne(id);
 
     if (!board) return;
