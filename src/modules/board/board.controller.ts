@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -51,6 +52,16 @@ export class BoardController {
     @User('id') userId: number,
   ): Promise<void> {
     await this.boardService.update(boardId, data, userId);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard)
+  async deleteBoard(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<void> {
+    await this.boardService.deleteOne(id, userId);
   }
 }
 

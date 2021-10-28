@@ -51,6 +51,15 @@ export class BoardService {
     return board;
   }
 
+  async deleteOne(id: number, userId: number): Promise<void> {
+    const board = await this.boardRepository.findOne(id);
+
+    if (!board) return;
+    if (board?.ownerId !== userId) throw new ForbiddenException(ACCESS_DENIED);
+
+    await this.boardRepository.delete(id);
+  }
+
   async findById(id: number): Promise<BoardEntity> {
     const board = await this.boardRepository.findOne(id);
 
