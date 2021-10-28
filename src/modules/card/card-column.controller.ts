@@ -47,6 +47,7 @@ export class CardColumnController {
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, ColumnGuard)
+  @UsePipes(MainValidationPipe)
   async updateColumn(
     @Param('id') id: number,
     @Body() data: CardDto,
