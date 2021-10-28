@@ -37,16 +37,6 @@ export class ColumnService {
     return column;
   }
 
-  async findById(id: number): Promise<ColumnEntity> {
-    if (isNaN(id)) throw new NotFoundException(COLUMN_NOT_FOUND);
-
-    const column = await this.columnRepository.findOne(id);
-
-    if (!column) throw new NotFoundException(COLUMN_NOT_FOUND);
-
-    return column;
-  }
-
   async update(
     id: number,
     { title, pos }: ColumnDto,
@@ -57,6 +47,26 @@ export class ColumnService {
     Object.assign(column, { title, pos });
 
     await this.columnRepository.update(id, column);
+
+    return column;
+  }
+
+  async deleteOne(id: number): Promise<void> {
+    if (isNaN(id)) return;
+
+    const column = await this.columnRepository.findOne(id);
+
+    if (!column) return;
+
+    await this.columnRepository.delete(id);
+  }
+
+  async findById(id: number): Promise<ColumnEntity> {
+    if (isNaN(id)) throw new NotFoundException(COLUMN_NOT_FOUND);
+
+    const column = await this.columnRepository.findOne(id);
+
+    if (!column) throw new NotFoundException(COLUMN_NOT_FOUND);
 
     return column;
   }

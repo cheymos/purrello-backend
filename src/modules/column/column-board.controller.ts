@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -52,6 +53,13 @@ export class ColumnBoardController {
     @Body() data: ColumnDto,
   ): Promise<void> {
     await this.columnService.update(id, data);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard)
+  async deleteColumn(@Param('id') id: number) {
+    await this.columnService.deleteOne(id);
   }
 }
 
