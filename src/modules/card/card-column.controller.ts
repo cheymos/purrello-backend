@@ -1,6 +1,8 @@
 import {
   Body,
-  Controller, Param,
+  Controller,
+  Get,
+  Param,
   Post,
   UseGuards,
   UsePipes
@@ -8,8 +10,10 @@ import {
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { ColumnGuard } from '../column/guards/column.guard';
+import { User } from '../user/decorators/user.decorator';
 import { CardService } from './card.service';
 import { CardDto } from './dtos/card.dto';
+import { CardEntity } from './entities/card.entity';
 
 @Controller('boards/:boardId/columns/:columnId/cards')
 export class CardColumnController {
@@ -25,6 +29,15 @@ export class CardColumnController {
     const card = await this.cardService.create(data, columnId);
 
     return { id: card.id };
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard, ColumnGuard)
+  getColumn(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<CardEntity> {
+    return this.cardService.getOne(id, userId);
   }
 }
 
