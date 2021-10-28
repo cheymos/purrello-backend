@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BoardModule } from './modules/board/board.module';
 import { CardModule } from './modules/card/card.module';
 import { ColumnModule } from './modules/column/column.module';
+import { CommentModule } from './modules/comment/comment.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -14,7 +15,8 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     BoardModule,
     ColumnModule,
-    CardModule
+    CardModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
