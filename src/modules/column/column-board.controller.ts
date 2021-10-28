@@ -16,6 +16,7 @@ import { BoardGuard } from '../board/guards/board.guard';
 import { User } from '../user/decorators/user.decorator';
 import { ColumnService } from './column.service';
 import { ColumnDto } from './dtos/column.dto';
+import { ColumnEntity } from './entities/column.entity';
 
 @Controller('boards/:boardId/columns')
 @UseGuards(BoardGuard)
@@ -28,7 +29,7 @@ export class ColumnBoardController {
   async createColumn(
     @Param('boardId') boardId: number,
     @Body() data: ColumnDto,
-  ) {
+  ): Promise<ColumnResponse> {
     const column = await this.columnService.create(data, boardId);
 
     return { id: column.id };
@@ -36,14 +37,24 @@ export class ColumnBoardController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  getColumn(@Param('id') id: number, @User('id') userId: number) {
+  getColumn(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<ColumnEntity> {
     return this.columnService.getOne(id, userId);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard)
-  async updateColumn(@Param('id') id: number, @Body() data: ColumnDto) {
+  async updateColumn(
+    @Param('id') id: number,
+    @Body() data: ColumnDto,
+  ): Promise<void> {
     await this.columnService.update(id, data);
   }
+}
+
+export interface ColumnResponse {
+  id: number;
 }
