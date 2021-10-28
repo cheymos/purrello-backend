@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -36,6 +39,18 @@ export class BoardController {
     @User('id') userId: number,
   ): Promise<BoardEntity> {
     return this.boardService.getOne(id, userId);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard)
+  @UsePipes(MainValidationPipe)
+  async updateBoard(
+    @Param('id') boardId: number,
+    @Body() data: BoardDto,
+    @User('id') userId: number,
+  ): Promise<void> {
+    await this.boardService.update(boardId, data, userId);
   }
 }
 

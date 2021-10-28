@@ -36,6 +36,21 @@ export class BoardService {
     return board;
   }
 
+  async update(
+    boardId: number,
+    { title, isPrivate }: BoardDto,
+    userId: number,
+  ): Promise<BoardEntity> {
+    const board = await this.findById(boardId);
+
+    if (board.ownerId !== userId) throw new ForbiddenException(ACCESS_DENIED);
+    Object.assign(board, { title, isPrivate });
+
+    await this.boardRepository.update(boardId, board);
+
+    return board;
+  }
+
   async findById(id: number): Promise<BoardEntity> {
     const board = await this.boardRepository.findOne(id);
 
