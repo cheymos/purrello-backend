@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import ormConfig from './configs/orm.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { BoardModule } from './modules/board/board.module';
+import { CardModule } from './modules/card/card.module';
 import { ColumnModule } from './modules/column/column.module';
 import { UserModule } from './modules/user/user.module';
 
@@ -13,6 +14,7 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     BoardModule,
     ColumnModule,
+    CardModule
   ],
 })
 export class AppModule {}
