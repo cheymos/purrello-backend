@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes
 } from '@nestjs/common';
@@ -38,6 +41,16 @@ export class CardColumnController {
     @User('id') userId: number,
   ): Promise<CardEntity> {
     return this.cardService.getOne(id, userId);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard, ColumnGuard)
+  async updateColumn(
+    @Param('id') id: number,
+    @Body() data: CardDto,
+  ): Promise<void> {
+    await this.cardService.update(id, data);
   }
 }
 

@@ -39,6 +39,15 @@ export class CardService {
     return card;
   }
 
+  async update(id: number, { content, pos }: CardDto): Promise<CardEntity> {
+    const card = await this.findById(id);
+
+    Object.assign(card, { content, pos });
+    await this.cardRepository.update(id, card);
+
+    return card;
+  }
+
   async findById(id: number, withColumn = false): Promise<CardEntity> {
     if (isNaN(id)) throw new NotFoundException(CARD_NOT_FOUND);
 
