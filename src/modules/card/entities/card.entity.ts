@@ -3,6 +3,12 @@ import { ColumnEntity } from '../../column/entities/column.entity';
 
 @Entity('cards')
 export class CardEntity {
+  constructor(content: string, pos: number, columnId: number) {
+    this.content = content;
+    this.pos = pos;
+    this.columnId = columnId;
+  }
+
   @PrimaryGeneratedColumn()
   readonly id: number;
 
