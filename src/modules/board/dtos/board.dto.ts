@@ -1,10 +1,10 @@
-import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
+import { IsBoolean, IsString, Length } from 'class-validator';
 
 export class BoardDto {
   @IsString()
   @Length(1, 255)
-  title: string;
+  readonly title: string;
 
   @IsBoolean()
-  isPrivate: boolean;
+  readonly isPrivate: boolean;
 }
