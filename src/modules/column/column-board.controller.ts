@@ -67,7 +67,7 @@ export class ColumnBoardController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, BoardGuard)
-  async deleteColumn(@Param('id') id: number) {
+  async deleteColumn(@Param('id') id: number): Promise<void> {
     await this.columnService.deleteOne(id);
   }
 }
