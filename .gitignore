@@ -37,3 +37,4 @@ lerna-debug.log*
 # Configs
 *.config.ts
 !orm-seed.config.ts
+!swagger.config.ts
