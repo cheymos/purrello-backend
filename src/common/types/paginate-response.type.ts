@@ -1,4 +1,8 @@
-export interface PaginateResponse<T> {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class PaginateResponse<T> {
+  @ApiProperty()
   data: T[];
+  @ApiProperty()
   total: number;
 }
