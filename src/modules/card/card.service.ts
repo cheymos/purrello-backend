@@ -35,6 +35,7 @@ export class CardService {
     if (board?.isPrivate && board.ownerId !== userId)
       throw new ForbiddenException(ACCESS_DENIED);
 
+    delete card.column;
     return card;
   }
 

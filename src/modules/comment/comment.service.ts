@@ -33,6 +33,7 @@ export class CommentService {
     if (board?.isPrivate && board.ownerId !== userId)
       throw new ForbiddenException(ACCESS_DENIED);
 
+    delete comment.card;
     return comment;
   }
 
