@@ -30,7 +30,6 @@ export class CardService {
 
   async getOne(id: number, userId: number): Promise<CardEntity> {
     const card = await this.findById(id, true);
-
     const board = card?.column?.board;
 
     if (board?.isPrivate && board.ownerId !== userId)
@@ -58,14 +57,14 @@ export class CardService {
     await this.cardRepository.delete(id);
   }
 
-  async findById(id: number, withColumn = false): Promise<CardEntity> {
+  async findById(id: number, withBoard = false): Promise<CardEntity> {
     if (isNaN(id)) throw new NotFoundException(CARD_NOT_FOUND);
 
     let card: CardEntity | undefined;
 
-    if (withColumn) {
+    if (withBoard) {
       card = await this.cardRepository.findOne(id, {
-        relations: ['column'],
+        relations: ['column', 'column.board'],
       });
     } else {
       card = await this.cardRepository.findOne(id);

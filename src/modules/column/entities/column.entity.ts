@@ -32,5 +32,5 @@ export class ColumnEntity {
   board?: BoardEntity;
 
   @OneToMany(() => CardEntity, (cardEntity) => cardEntity.column)
-  cards: CardEntity[];
+  cards?: CardEntity[];
 }
