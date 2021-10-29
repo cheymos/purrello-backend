@@ -12,6 +12,7 @@ import {
   UsePipes
 } from '@nestjs/common';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CardGuard } from '../card/guards/card.guard';
 import { User } from '../user/decorators/user.decorator';
@@ -36,8 +37,17 @@ export class CommentCardController {
     return { id: column.id };
   }
 
+  @Get()
+  @UseGuards(CardGuard)
+  getAllCardComments(
+    @Param('cardId') cardId: number,
+    @User('id') userId: number,
+  ): Promise<PaginateResponse<CommentEntity>> {
+    return this.commentService.getAllCardComments(cardId, userId);
+  }
+
   @Get(':id')
-  @UseGuards(AuthGuard, CardGuard)
+  @UseGuards(CardGuard)
   getComment(
     @Param('id') id: number,
     @User('id') userId: number,
