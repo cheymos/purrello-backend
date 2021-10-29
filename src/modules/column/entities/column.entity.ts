@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import { BoardEntity } from '../../board/entities/board.entity';
+import { CardEntity } from '../../card/entities/card.entity';
 
 @Entity('columns')
 export class ColumnEntity {
@@ -21,6 +28,9 @@ export class ColumnEntity {
   @Column()
   boardId: number;
 
-  @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE', eager: true })
+  @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE' })
   board?: BoardEntity;
+
+  @OneToMany(() => CardEntity, (cardEntity) => cardEntity.column)
+  cards: CardEntity[];
 }

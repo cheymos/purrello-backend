@@ -20,7 +20,7 @@ export class ColumnGuard implements CanActivate {
 
   async validateRequest(request: ModifyExpressRequest): Promise<boolean> {
     const columnId = +request.params.columnId;
-    const column = await this.columnService.findById(columnId);
+    const column = await this.columnService.findById(columnId, true);
 
     const userId = request.userPayload?.id;
 

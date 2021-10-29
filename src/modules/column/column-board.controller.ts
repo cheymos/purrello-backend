@@ -12,6 +12,7 @@ import {
   UsePipes
 } from '@nestjs/common';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { BoardGuard } from '../board/guards/board.guard';
 import { User } from '../user/decorators/user.decorator';
@@ -33,6 +34,15 @@ export class ColumnBoardController {
     const column = await this.columnService.create(data, boardId);
 
     return { id: column.id };
+  }
+
+  @Get()
+  @UseGuards(AuthGuard, BoardGuard)
+  getBoardColumnsWithCards(
+    @Param('boardId') boardId: number,
+    @User('id') userId: number,
+  ): Promise<PaginateResponse<ColumnEntity>> {
+    return this.columnService.getBoardColumnsWithCards(boardId, userId);
   }
 
   @Get(':id')
