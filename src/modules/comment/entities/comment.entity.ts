@@ -10,6 +10,12 @@ import { UserEntity } from '../../user/entities/user.entity';
 
 @Entity('comments')
 export class CommentEntity {
+  constructor(content: string, userId: number, cardId: number) {
+    this.content = content;
+    this.userId = userId;
+    this.cardId = cardId;
+  }
+
   @PrimaryGeneratedColumn()
   readonly id: number;
 
