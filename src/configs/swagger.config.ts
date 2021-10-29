@@ -1,8 +1,9 @@
 import { DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
 
 export const swaggerConfig = new DocumentBuilder()
-  .setTitle('Purrello API')
+  .setTitle('🐱‍👤 Purrello API')
   .setDescription('The Purrello API docs')
+  .setExternalDoc('Source code', 'https://github.com/cheymos/purrello-backend')
   .setVersion('1.0')
   .addBearerAuth({
     type: 'http',
@@ -11,5 +12,6 @@ export const swaggerConfig = new DocumentBuilder()
   .build();
 
 export const swaggerModuleOptions: SwaggerCustomOptions = {
-  customSiteTitle: 'Purrello API',
+  customSiteTitle: 'Purrello API docs',
+  customfavIcon: '../favicon.ico',
 };
