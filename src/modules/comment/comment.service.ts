@@ -45,6 +45,16 @@ export class CommentService {
     return comment;
   }
 
+  async deleteOne(id: number): Promise<void> {
+    if (isNaN(id)) return;
+
+    const comment = await this.commentRepository.findOne(id);
+
+    if (!comment) return;
+
+    await this.commentRepository.delete(id);
+  }
+
   async findById(id: number, withCard = false): Promise<CommentEntity> {
     if (isNaN(id)) throw new NotFoundException(COMMENT_NOT_FOUND);
 

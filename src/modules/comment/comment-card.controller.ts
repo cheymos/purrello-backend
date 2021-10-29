@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -53,6 +54,13 @@ export class CommentCardController {
     @Body() data: CommentDto,
   ): Promise<void> {
     await this.commentService.update(id, data);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard, CardGuard)
+  async deleteComment(@Param('id') id: number): Promise<void> {
+    await this.commentService.deleteOne(id);
   }
 }
 
