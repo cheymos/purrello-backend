@@ -10,5 +10,6 @@ import { CardEntity } from './entities/card.entity';
   imports: [TypeOrmModule.forFeature([CardEntity]), AuthModule, ColumnModule],
   controllers: [CardColumnController],
   providers: [CardService],
+  exports: [CardService],
 })
 export class CardModule {}
