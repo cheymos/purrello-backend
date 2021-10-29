@@ -9,6 +9,8 @@ import {
   ACCESS_DENIED,
   COMMENT_NOT_FOUND
 } from '../../common/constants/error.constants';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
+import { CardService } from '../card/card.service';
 import { CommentDto } from './dtos/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
 
@@ -17,12 +19,30 @@ export class CommentService {
   constructor(
     @InjectRepository(CommentEntity)
     private readonly commentRepository: Repository<CommentEntity>,
+    private readonly cardService: CardService,
   ) {}
 
   create({ content }: CommentDto, cardId: number, userId: number) {
     const comment = new CommentEntity(content, userId, cardId);
 
     return this.commentRepository.save(comment);
+  }
+
+  async getAllCardComments(
+    cardId: number,
+    userId: number,
+  ): Promise<PaginateResponse<CommentEntity>> {
+    // must be oprimize
+    const card = await this.cardService.findById(cardId, true);
+
+    if (card.column?.board?.isPrivate && card.column.board.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
+
+    const [comments, count] = await this.commentRepository.findAndCount({
+      cardId,
+    });
+
+    return { data: comments, total: count };
   }
 
   async getOne(id: number, userId: number): Promise<CommentEntity> {
