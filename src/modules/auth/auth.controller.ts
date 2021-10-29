@@ -36,7 +36,8 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     type: LoginResponse,
-    description: `Returns LoginResponse and sets "refreshToken" cookies`,
+    description:
+      'Sets "refreshToken" cookies. The access token will expire in 30 minutes, refresh token - 30 days',
   })
   // ----------------------------
   @Post('login')
