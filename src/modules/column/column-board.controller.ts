@@ -20,12 +20,11 @@ import { ColumnDto } from './dtos/column.dto';
 import { ColumnEntity } from './entities/column.entity';
 
 @Controller('boards/:boardId/columns')
-@UseGuards(BoardGuard)
 export class ColumnBoardController {
   constructor(private readonly columnService: ColumnService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, BoardGuard)
   @UsePipes(MainValidationPipe)
   async createColumn(
     @Param('boardId') boardId: number,
@@ -37,7 +36,7 @@ export class ColumnBoardController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(BoardGuard)
   getColumn(
     @Param('id') id: number,
     @User('id') userId: number,
@@ -47,7 +46,7 @@ export class ColumnBoardController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, BoardGuard)
   async updateColumn(
     @Param('id') id: number,
     @Body() data: ColumnDto,
@@ -57,7 +56,7 @@ export class ColumnBoardController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, BoardGuard)
   async deleteColumn(@Param('id') id: number) {
     await this.columnService.deleteOne(id);
   }
