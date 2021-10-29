@@ -9,9 +9,10 @@ import {
   Post,
   Put,
   UseGuards,
-  UsePipes,
+  UsePipes
 } from '@nestjs/common';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../user/decorators/user.decorator';
 import { BoardService } from './board.service';
@@ -32,6 +33,14 @@ export class BoardController {
     const board = await this.boardService.create(data, userId);
 
     return { id: board.id };
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  getUserBoards(
+    @User('id') userId: number,
+  ): Promise<PaginateResponse<BoardEntity>> {
+    return this.boardService.getAllUserBoards(userId);
   }
 
   @Get(':id')

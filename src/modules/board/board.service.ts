@@ -9,6 +9,7 @@ import {
   ACCESS_DENIED,
   BOARD_NOT_FOUND
 } from '../../common/constants/error.constants';
+import { PaginateResponse } from '../../common/types/paginate-response.type';
 import { BoardDto } from './dtos/board.dto';
 import { BoardEntity } from './entities/board.entity';
 
@@ -34,6 +35,16 @@ export class BoardService {
       throw new ForbiddenException(ACCESS_DENIED);
 
     return board;
+  }
+
+  async getAllUserBoards(
+    userId: number,
+  ): Promise<PaginateResponse<BoardEntity>> {
+    const [boards, count] = await this.boardRepository.findAndCount({
+      ownerId: userId,
+    });
+
+    return { data: boards, total: count };
   }
 
   async update(
