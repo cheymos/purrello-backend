@@ -24,7 +24,7 @@ export class ColumnGuard implements CanActivate {
 
     const userId = request.userPayload?.id;
 
-    if (userId && !this.checkAccess(userId, column))
+    if (column.board?.isPrivate && userId && !this.checkAccess(userId, column))
       throw new ForbiddenException(ACCESS_DENIED);
 
     return true;

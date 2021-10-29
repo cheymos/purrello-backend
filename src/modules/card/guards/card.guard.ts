@@ -24,7 +24,11 @@ export class CardGuard implements CanActivate {
 
     const userId = request.userPayload?.id;
 
-    if (userId && !this.checkAccess(userId, card))
+    if (
+      card.column?.board?.isPrivate &&
+      userId &&
+      !this.checkAccess(userId, card)
+    )
       throw new ForbiddenException(ACCESS_DENIED);
 
     return true;

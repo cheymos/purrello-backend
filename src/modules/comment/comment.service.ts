@@ -37,8 +37,14 @@ export class CommentService {
     return comment;
   }
 
-  async update(id: number, { content }: CommentDto): Promise<CommentEntity> {
+  async update(
+    id: number,
+    { content }: CommentDto,
+    userId: number,
+  ): Promise<CommentEntity> {
     const comment = await this.findById(id);
+
+    if (comment.userId !== userId) throw new ForbiddenException(ACCESS_DENIED);
 
     comment.content = content;
     await this.commentRepository.update(id, comment);
@@ -46,12 +52,13 @@ export class CommentService {
     return comment;
   }
 
-  async deleteOne(id: number): Promise<void> {
+  async deleteOne(id: number, userId: number): Promise<void> {
     if (isNaN(id)) return;
 
     const comment = await this.commentRepository.findOne(id);
 
     if (!comment) return;
+    if (comment.userId !== userId) throw new ForbiddenException(ACCESS_DENIED);
 
     await this.commentRepository.delete(id);
   }

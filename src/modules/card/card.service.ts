@@ -9,6 +9,7 @@ import {
   ACCESS_DENIED,
   CARD_NOT_FOUND
 } from '../../common/constants/error.constants';
+import { BoardService } from '../board/board.service';
 import { CardDto } from './dtos/card.dto';
 import { CardEntity } from './entities/card.entity';
 
@@ -17,13 +18,20 @@ export class CardService {
   constructor(
     @InjectRepository(CardEntity)
     private readonly cardRepository: Repository<CardEntity>,
+    private readonly boardService: BoardService,
   ) {}
 
   async create(
     { content, pos }: CardDto,
     columnId: number,
+    boardId: number,
+    userId: number,
   ): Promise<CardEntity> {
     // add a check to position
+    const board = await this.boardService.findById(boardId);
+
+    if (board.ownerId !== userId) throw new ForbiddenException(ACCESS_DENIED);
+
     const card = new CardEntity(content, pos, columnId);
     return this.cardRepository.save(card);
   }
@@ -39,21 +47,33 @@ export class CardService {
     return card;
   }
 
-  async update(id: number, { content, pos }: CardDto): Promise<CardEntity> {
-    const card = await this.findById(id);
+  async update(
+    id: number,
+    { content, pos }: CardDto,
+    userId: number,
+  ): Promise<CardEntity> {
+    const card = await this.findById(id, true);
 
+    if (card.column?.board?.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
+
+    delete card.column;
     Object.assign(card, { content, pos });
     await this.cardRepository.update(id, card);
 
     return card;
   }
 
-  async deleteOne(id: number): Promise<void> {
+  async deleteOne(id: number, userId: number): Promise<void> {
     if (isNaN(id)) return;
 
-    const card = await this.cardRepository.findOne(id);
+    const card = await this.cardRepository.findOne(id, {
+      relations: ['column', 'column.board'],
+    });
 
     if (!card) return;
+    if (card?.column?.board?.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
 
     await this.cardRepository.delete(id);
   }

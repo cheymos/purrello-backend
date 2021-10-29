@@ -30,14 +30,15 @@ export class ColumnBoardController {
   async createColumn(
     @Param('boardId') boardId: number,
     @Body() data: ColumnDto,
+    @User('id') userId: number,
   ): Promise<ColumnResponse> {
-    const column = await this.columnService.create(data, boardId);
+    const column = await this.columnService.create(data, boardId, userId);
 
     return { id: column.id };
   }
 
   @Get()
-  @UseGuards(AuthGuard, BoardGuard)
+  @UseGuards(BoardGuard)
   getBoardColumnsWithCards(
     @Param('boardId') boardId: number,
     @User('id') userId: number,
@@ -60,15 +61,19 @@ export class ColumnBoardController {
   async updateColumn(
     @Param('id') id: number,
     @Body() data: ColumnDto,
+    @User('id') userId: number,
   ): Promise<void> {
-    await this.columnService.update(id, data);
+    await this.columnService.update(id, data, userId);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, BoardGuard)
-  async deleteColumn(@Param('id') id: number): Promise<void> {
-    await this.columnService.deleteOne(id);
+  async deleteColumn(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<void> {
+    await this.columnService.deleteOne(id, userId);
   }
 }
 
