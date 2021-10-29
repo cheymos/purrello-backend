@@ -24,7 +24,7 @@ export class BoardGuard implements CanActivate {
 
     const userId = request.userPayload?.id;
 
-    if (userId && !this.checkAccess(userId, board))
+    if (board.isPrivate && userId && !this.checkAccess(userId, board))
       throw new ForbiddenException(ACCESS_DENIED);
 
     return true;

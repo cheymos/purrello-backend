@@ -29,15 +29,17 @@ export class CardColumnController {
   async createCard(
     @Body() data: CardDto,
     @Param('columnId') columnId: number,
+    @Param('boardId') boardId: number,
+    @User('id') userId: number,
   ): Promise<CardResponse> {
-    const card = await this.cardService.create(data, columnId);
+    const card = await this.cardService.create(data, columnId, boardId, userId);
 
     return { id: card.id };
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard, ColumnGuard)
-  getColumn(
+  @UseGuards(ColumnGuard)
+  getCard(
     @Param('id') id: number,
     @User('id') userId: number,
   ): Promise<CardEntity> {
@@ -48,18 +50,22 @@ export class CardColumnController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, ColumnGuard)
   @UsePipes(MainValidationPipe)
-  async updateColumn(
+  async updateCard(
     @Param('id') id: number,
     @Body() data: CardDto,
+    @User('id') userId: number,
   ): Promise<void> {
-    await this.cardService.update(id, data);
+    await this.cardService.update(id, data, userId);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, ColumnGuard)
-  async deleteColumn(@Param('id') id: number): Promise<void> {
-    await this.cardService.deleteOne(id);
+  async deleteCard(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<void> {
+    await this.cardService.deleteOne(id, userId);
   }
 }
 

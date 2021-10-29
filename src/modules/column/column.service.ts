@@ -25,14 +25,19 @@ export class ColumnService {
   async create(
     { title, pos }: ColumnDto,
     boardId: number,
+    userId: number,
   ): Promise<ColumnEntity> {
     // add a check to position
+    const board = await this.boardService.findById(boardId);
+
+    if (board.ownerId !== userId) throw new ForbiddenException(ACCESS_DENIED);
+
     const column = new ColumnEntity(title, pos, boardId);
     return this.columnRepository.save(column);
   }
 
   async getOne(id: number, userId: number): Promise<ColumnEntity> {
-    const column = await this.findById(id);
+    const column = await this.findById(id, true);
 
     if (column.board?.isPrivate && column.board.ownerId !== userId)
       throw new ForbiddenException(ACCESS_DENIED);
@@ -47,7 +52,7 @@ export class ColumnService {
     // optimize...
     const board = await this.boardService.findById(boardId);
 
-    if (board.ownerId !== userId) {
+    if (board.isPrivate && board.ownerId !== userId) {
       throw new ForbiddenException(ACCESS_DENIED);
     }
 
@@ -58,8 +63,15 @@ export class ColumnService {
     return { data: columns, total: count };
   }
 
-  async update(id: number, { title, pos }: ColumnDto): Promise<ColumnEntity> {
-    const column = await this.findById(id);
+  async update(
+    id: number,
+    { title, pos }: ColumnDto,
+    userId: number,
+  ): Promise<ColumnEntity> {
+    const column = await this.findById(id, true);
+
+    if (column.board?.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
 
     delete column.board;
     Object.assign(column, { title, pos });
@@ -69,12 +81,16 @@ export class ColumnService {
     return column;
   }
 
-  async deleteOne(id: number): Promise<void> {
+  async deleteOne(id: number, userId: number): Promise<void> {
     if (isNaN(id)) return;
 
-    const column = await this.columnRepository.findOne(id);
+    const column = await this.columnRepository.findOne(id, {
+      relations: ['board'],
+    });
 
     if (!column) return;
+    if (column.board?.ownerId !== userId)
+      throw new ForbiddenException(ACCESS_DENIED);
 
     await this.columnRepository.delete(id);
   }

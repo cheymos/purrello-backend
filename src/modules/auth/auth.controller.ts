@@ -6,16 +6,16 @@ import {
   Post,
   Res,
   UseGuards,
-  UsePipes,
+  UsePipes
 } from '@nestjs/common';
 import { Response } from 'express';
 import { Cookies } from '../../common/decorators/cookies.decorator';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
+import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
-import { AuthService } from './auth.service';
-import { LoginResponse } from './types/login-response.type';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginResponse } from './types/login-response.type';
 
 @Controller('auth')
 export class AuthController {
@@ -54,7 +54,6 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(200)
-  @UseGuards(AuthGuard)
   async refresh(
     @Cookies('refreshToken') refreshToken: string,
     @Res({ passthrough: true }) res: Response,

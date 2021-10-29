@@ -52,15 +52,19 @@ export class CommentCardController {
   async updateComment(
     @Param('id') id: number,
     @Body() data: CommentDto,
+    @User('id') userId: number,
   ): Promise<void> {
-    await this.commentService.update(id, data);
+    await this.commentService.update(id, data, userId);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard, CardGuard)
-  async deleteComment(@Param('id') id: number): Promise<void> {
-    await this.commentService.deleteOne(id);
+  async deleteComment(
+    @Param('id') id: number,
+    @User('id') userId: number,
+  ): Promise<void> {
+    await this.commentService.deleteOne(id, userId);
   }
 }
 
