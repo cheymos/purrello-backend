@@ -6,27 +6,39 @@ import {
   Post,
   Res,
   UseGuards,
-  UsePipes,
+  UsePipes
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { Cookies } from '../../common/decorators/cookies.decorator';
 import { MainValidationPipe } from '../../common/pipes/main-validation.pipe';
+import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
-import { AuthService } from './auth.service';
-import { LoginResponse } from './types/login-response.type';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginResponse } from './types/login-response.type';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({ summary: 'User registration in system' })
+  @ApiResponse({ status: 201, description: 'Successful operation' })
+  //---------------------------
   @Post('register')
   @UsePipes(MainValidationPipe)
   async register(@Body() registerData: RegisterDto): Promise<void> {
     await this.authService.register(registerData);
   }
 
+  @ApiOperation({ summary: 'Logs user into the system' })
+  @ApiResponse({
+    status: 200,
+    type: LoginResponse,
+    description: `Returns LoginResponse and sets "refreshToken" cookies`,
+  })
+  // ----------------------------
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(MainValidationPipe)
@@ -41,6 +53,9 @@ export class AuthController {
     return response;
   }
 
+  @ApiOperation({ summary: 'Logs out current logged in user session' })
+  @ApiResponse({ status: 204, description: 'Successful operation' })
+  //-------------------------------
   @Post('logout')
   @UseGuards(AuthGuard)
   @HttpCode(204)
@@ -52,6 +67,15 @@ export class AuthController {
     res.clearCookie('refreshToken');
   }
 
+  @ApiOperation({
+    summary: 'Updating refresh and access tokens',
+  })
+  @ApiResponse({
+    type: LoginResponse,
+    description: 'Successful operation (refresh token must be in cookies)',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  // -------------------------------
   @Post('refresh')
   @HttpCode(200)
   @UseGuards(AuthGuard)
