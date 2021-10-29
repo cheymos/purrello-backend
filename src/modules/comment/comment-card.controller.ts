@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes
 } from '@nestjs/common';
@@ -39,6 +42,17 @@ export class CommentCardController {
     @User('id') userId: number,
   ): Promise<CommentEntity> {
     return this.commentService.getOne(id, userId);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard, CardGuard)
+  @UsePipes(MainValidationPipe)
+  async updateComment(
+    @Param('id') id: number,
+    @Body() data: CommentDto,
+  ): Promise<void> {
+    await this.commentService.update(id, data);
   }
 }
 

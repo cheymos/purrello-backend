@@ -36,6 +36,15 @@ export class CommentService {
     return comment;
   }
 
+  async update(id: number, { content }: CommentDto): Promise<CommentEntity> {
+    const comment = await this.findById(id);
+
+    comment.content = content;
+    await this.commentRepository.update(id, comment);
+
+    return comment;
+  }
+
   async findById(id: number, withCard = false): Promise<CommentEntity> {
     if (isNaN(id)) throw new NotFoundException(COMMENT_NOT_FOUND);
 
