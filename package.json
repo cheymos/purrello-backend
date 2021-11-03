@@ -26,8 +26,8 @@
     "migration:run": "yarn typeorm migration:run",
     "migration:revert": "yarn typeorm migration:revert",
     "seed": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config=src/configs/orm-seed.config.ts",
-    "seed:create": "yarn _seed migration:create -n",
-    "seed:run": "yarn _seed migration:run"
+    "seed:create": "yarn seed migration:create -n",
+    "seed:run": "yarn seed migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

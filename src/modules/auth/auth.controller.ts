@@ -79,7 +79,6 @@ export class AuthController {
   // -------------------------------
   @Post('refresh')
   @HttpCode(200)
-  @UseGuards(AuthGuard)
   async refresh(
     @Cookies('refreshToken') refreshToken: string,
     @Res({ passthrough: true }) res: Response,
