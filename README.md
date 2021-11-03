@@ -1,4 +1,4 @@
-# 🐱‍👤 Purrello: backend
+# 🐱 Purrello: backend
 
 ## Description
 
