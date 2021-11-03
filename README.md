@@ -4,6 +4,8 @@
 
 Backend part of the Purrello project which includes CRUD operations, authentication using JWT, pagination and etc.
 
+[See database structure.](https://dbdiagram.io/d/61793363fa17df5ea6715ca6)
+
 ## Installation
 
 ```bash
