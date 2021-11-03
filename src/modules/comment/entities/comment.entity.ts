@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -16,27 +17,33 @@ export class CommentEntity {
     this.cardId = cardId;
   }
 
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   readonly id: number;
 
+  @ApiProperty()
   @Column('text')
   content: string;
 
+  @ApiProperty()
   @Column()
   userId: number;
 
   @ManyToOne(() => UserEntity)
   user?: UserEntity;
 
+  @ApiProperty()
   @Column()
   cardId: number;
 
   @ManyToOne(() => CardEntity, { onDelete: 'CASCADE' })
   card?: CardEntity;
 
+  @ApiProperty()
   @CreateDateColumn()
   readonly createdAt: Date;
 
+  @ApiProperty()
   @Column({ default: () => 'now()' })
   readonly lastUpdated: Date;
 }

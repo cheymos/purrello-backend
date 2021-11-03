@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -16,21 +17,26 @@ export class ColumnEntity {
     this.boardId = boardId;
   }
 
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   readonly id: number;
 
+  @ApiProperty()
   @Column({ length: 255 })
   title: string;
 
+  @ApiProperty()
   @Column('smallint')
   pos: number;
 
+  @ApiProperty()
   @Column()
   boardId: number;
 
   @ManyToOne(() => BoardEntity, { onDelete: 'CASCADE' })
   board?: BoardEntity;
 
+  @ApiPropertyOptional({ type: [CardEntity] })
   @OneToMany(() => CardEntity, (cardEntity) => cardEntity.column)
   cards?: CardEntity[];
 }
