@@ -34,7 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# Configs
-*.config.ts
-!orm-seed.config.ts
-!swagger.config.ts
+# Env
+.env
