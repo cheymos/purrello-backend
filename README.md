@@ -14,18 +14,12 @@ $ yarn install
 
 ## Usage
 
-Copy the example config files - _jwt.config.example.ts, orm.config.example.ts_ - `src\configs` and make the required configuration changes in the config files.
+Copy the example env file and make the required configuration changes in the .env file
 
 For example:
 
 ```bash
-$ cp jwt.config.example.ts jwt.config.ts
-```
-
-And...
-
-```bash
-$ cp orm.config.example.ts orm.config.ts
+$ cp env.example .env
 ```
 
 ## Running the app
