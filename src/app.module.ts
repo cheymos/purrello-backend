@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import ormConfig from './configs/orm.config';
+import { getOrmConfig } from './configs/orm.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { BoardModule } from './modules/board/board.module';
 import { CardModule } from './modules/card/card.module';
@@ -10,7 +11,8 @@ import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(ormConfig),
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(getOrmConfig()),
     UserModule,
     AuthModule,
     BoardModule,

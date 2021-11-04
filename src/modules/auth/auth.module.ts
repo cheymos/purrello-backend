@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
@@ -11,6 +12,7 @@ import { TokenService } from './token.service';
   imports: [
     TypeOrmModule.forFeature([RefreshTokenEntity, RefreshTokenEntity]),
     UserModule,
+    ConfigModule
   ],
   controllers: [AuthController],
   providers: [AuthService, TokenService],
