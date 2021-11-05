@@ -6,6 +6,8 @@ Backend part of the Purrello project which includes CRUD operations, authenticat
 
 [See database structure.](https://dbdiagram.io/d/61793363fa17df5ea6715ca6)
 
+[Live demo](http://23.111.121.213/docs) only for testing!
+
 ## Installation
 
 ```bash
